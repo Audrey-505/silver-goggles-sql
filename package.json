@@ -4,5 +4,29 @@
     "express": "^4.18.2",
     "inquirer": "^8.2.4",
     "mysql2": "^3.0.1"
-  }
+  },
+  "name": "companyinfo",
+  "version": "1.0.0",
+  "description": "a command line application that will help retrieve and munipulate information from a connected databse",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Audrey-505/silver-goggles-sql.git"
+  },
+  "keywords": [
+    "node",
+    "express",
+    "inquirer"
+  ],
+  "author": "Audrey Alcantara",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Audrey-505/silver-goggles-sql/issues"
+  },
+  "homepage": "https://github.com/Audrey-505/silver-goggles-sql#readme"
 }
