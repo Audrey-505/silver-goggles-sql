@@ -17,14 +17,21 @@ function start(){
     inquirer
     .prompt([
        {
-        type: 'input',
+        type: 'list',
         name: 'options',
         message: 'What would you like to do?',
         choices: ['view all departments', 'view all roles', 'view all employees', 'add a department', 'add a role', 'add an employee', 'update an employee role']
        }
     ]).then((data) => {
         if(data.options === 'view all departments'){
-            
+            app.get('/api/department', async (req, res) => {
+                try {
+                    const result = await db.promise().query('SELECT id, department_name AS department FROM departments')
+                    console.table(result[0])
+                } catch (err) {
+                    res.status(500).json(err)
+                }
+            })
         }
     })
 }
@@ -41,15 +48,16 @@ const db = mysql.createConnection(
     console.log('Connected to company_db')
 )
 
+//COMMENTING OUT FOR TESTING 
 //could I remove the 'AS deparment' from the sql line?
-app.get('/api/department', async (req, res) => {
-    try {
-        const result = await db.promise().query('SELECT id, department_name AS department FROM departments')
-        res.json(result[0])
-    } catch (err) {
-        res.status(500).json(err)
-    }
-})
+// app.get('/api/department', async (req, res) => {
+//     try {
+//         const result = await db.promise().query('SELECT id, department_name AS department FROM departments')
+//         res.json(result[0])
+//     } catch (err) {
+//         res.status(500).json(err)
+//     }
+// })
 
 app.get('/api/role', async (req, res) => {
     try {
@@ -72,7 +80,7 @@ app.get('/api/employee', async (req, res) => {
 
 
 
-
+start()
 
 app.listen(PORT, () => {
     console.log(`Server running on ${PORT}`)
