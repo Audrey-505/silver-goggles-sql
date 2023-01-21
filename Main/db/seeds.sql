@@ -10,5 +10,5 @@ VALUES ("Support Rep", 45000, 1),
 
 INSERT INTO employees (first_name, last_name, role_id, manager_id)
 VALUES ("Katy", "Smith", 2, 3),
-       ("Sally", "Sue", 3),
+       ("Sally", "Sue", 3, 4),
        ("Ash", "Ketchum", 1, 3);

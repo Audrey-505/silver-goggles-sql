@@ -43,7 +43,7 @@ app.get('/api/role', async (req, res) => {
 
 app.get('/api/employee', async (req, res) => {
     try {
-        const result = await db.promise().query('SELECT id, first_name, last_name, role_id, manager AS employee FROM employees')
+        const result = await db.promise().query('SELECT id, first_name, last_name, role_id, manager_id AS employee FROM employees')
         res.json(result[0])
     } catch (err) {
         res.status(500).json(err)
