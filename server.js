@@ -11,6 +11,25 @@ const app = express()
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json())
 
+
+//Inquirer 
+function start(){
+    inquirer
+    .prompt([
+       {
+        type: 'input',
+        name: 'options',
+        message: 'What would you like to do?',
+        choices: ['view all departments', 'view all roles', 'view all employees', 'add a department', 'add a role', 'add an employee', 'update an employee role']
+       }
+    ]).then((data) => {
+        if(data.options === 'view all departments'){
+            
+        }
+    })
+}
+
+
 //CONNECT TO DB
 const db = mysql.createConnection(
     {
