@@ -33,7 +33,7 @@ function start() {
             }
         ]).then((data) => {
             //switch statement for each option / 
-            switch (data.choices) {
+            switch (data.options) {
                 case "view all departments":
                     viewAllDepartments()
                     break;
@@ -71,7 +71,7 @@ const viewAllDepartments = () => {
             console.log(err)
         } else {
             console.log("\n")
-            console.table(row[0])
+            console.table(row)
             start()
         }
     })
