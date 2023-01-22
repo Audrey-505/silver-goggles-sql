@@ -29,7 +29,7 @@ function start() {
                 type: 'list',
                 name: 'options',
                 message: 'What would you like to do?',
-                choices: ['view all departments', 'view all roles', 'view all employees', 'add a department', 'add a role', 'add an employee', 'update an employee role']
+                choices: ['view all departments', 'view all roles', 'view all employees', 'add a department', 'add a role', 'add an employee', 'update an employee role', 'quit']
             }
         ]).then((data) => {
             //switch statement for each option / 
@@ -55,7 +55,7 @@ function start() {
                 case "update an employee role":
                     updateEmployeeRole()
                     break;
-                case "exit":
+                case "quit":
                     process.exit()
             }
         })
@@ -104,16 +104,101 @@ const viewAllEmployees = () => {
 }
 
 const addADepartment = () => {
-    const sql = 'SELECT id, first_name, last_name, role_id, manager_id AS employee FROM employees'
-    db.query(sql, (err, row) => {
-        if (err) {
-            console.log(err)
-        } else {
-            console.log("\n")
-            console.table(row)
-            start()
-        }
-    })
+
+    inquirer
+        .prompt([
+            {
+                type: 'input',
+                name: 'department_name',
+                message: 'what is the new department name?'
+            }
+        ]).then((data) => {
+            const sql = 'INSERT INTO departments (department_name) VALUES (?)';
+            const params = [data.department_name]
+            db.query(sql, params, (err, row) => {
+                if (err) {
+                    console.log(err)
+                } else {
+                    console.log("\n")
+                    console.table(row)
+                    start()
+                }
+            })
+        })
+}
+
+const addARole = () => {
+
+    inquirer
+        .prompt([
+            {
+                type: 'input',
+                name: 'title',
+                message: 'what is the title of the new role?'
+            },
+            {
+                type: 'input',
+                name: 'salary',
+                message: `what is the new role's salary?`
+            },
+            {
+                type: 'input',
+                name: 'department_id',
+                message: `what is the role's department id?`
+            }
+        ]).then((data) => {
+            const params = [data.title, data.salary, data.department_id]
+            const sql = `INSERT INTO roles (title, salary, department_id) VALUES (${params})`;
+            //const params = [data.title, data.salary, data.department_id]
+            db.query(sql, params, (err, row) => {
+                if (err) {
+                    console.log(err)
+                } else {
+                    console.log("\n")
+                    console.table(row)
+                    start()
+                }
+            })
+        })
+}
+
+const addAnEmployee = () => {
+
+    inquirer
+        .prompt([
+            {
+                type: 'input',
+                name: 'first_name',
+                message: `what is the new employee's first name?`
+            },
+            {
+                type: 'input',
+                name: 'last_name',
+                message: `what is the new employee's last name?`
+            },
+            {
+                type: 'input',
+                name: 'role_id',
+                message: `what is the new employee's role id?`
+            },
+            {
+                type: 'input',
+                name: 'manager_id',
+                message: `what is the new employee's manager id?`
+            }
+        ]).then((data) => {
+            const sql = 'INSERT INTO employees (first_name, last_name, role_id, manager_id) VALUES (?)';
+            const params = [data.first_name, data.last_name, data.role_id, data.manager_id]
+            db.query(sql, params, (err, row) => {
+                if (err) {
+                    console.log(err)
+                } else {
+                    console.log("\n")
+                    console.table(row)
+                    start()
+                }
+            })
+        })
 }
 
 start()
