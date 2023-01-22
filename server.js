@@ -104,7 +104,6 @@ const viewAllEmployees = () => {
 }
 
 const addADepartment = () => {
-
     inquirer
         .prompt([
             {
@@ -128,7 +127,6 @@ const addADepartment = () => {
 }
 
 const addARole = () => {
-
     inquirer
         .prompt([
             {
@@ -147,10 +145,11 @@ const addARole = () => {
                 message: `what is the role's department id?`
             }
         ]).then((data) => {
-            const params = [data.title, data.salary, data.department_id]
-            const sql = `INSERT INTO roles (title, salary, department_id) VALUES (${params})`;
+            console.log(data)
             //const params = [data.title, data.salary, data.department_id]
-            db.query(sql, params, (err, row) => {
+            const sql = `INSERT INTO roles (title, salary, department_id) VALUES (${data.title}, ${data.salary}, ${data.department_id})`;
+            //const params = [data.title, data.salary, data.department_id]
+            db.query(sql, (err, row) => {
                 if (err) {
                     console.log(err)
                 } else {
@@ -159,11 +158,12 @@ const addARole = () => {
                     start()
                 }
             })
+            //console.log(test)
         })
+
 }
 
 const addAnEmployee = () => {
-
     inquirer
         .prompt([
             {
@@ -200,6 +200,44 @@ const addAnEmployee = () => {
             })
         })
 }
+
+// const updateEmployeeRole = () => {
+//     inquirer
+//         .prompt([
+//             {
+//                 type: 'input',
+//                 name: 'employee',
+//                 message: `select the employee to update their role`
+//             },
+//             {
+//                 type: 'input',
+//                 name: 'role',
+//                 message: `select the role to assign the employee`
+//             },
+//             {
+//                 type: 'input',
+//                 name: 'role_id',
+//                 message: `what is the new employee's role id?`
+//             },
+//             {
+//                 type: 'input',
+//                 name: 'manager_id',
+//                 message: `what is the new employee's manager id?`
+//             }
+//         ]).then((data) => {
+//             const sql = 'INSERT INTO employees (first_name, last_name, role_id, manager_id) VALUES (?)';
+//             const params = [data.first_name, data.last_name, data.role_id, data.manager_id]
+//             db.query(sql, params, (err, row) => {
+//                 if (err) {
+//                     console.log(err)
+//                 } else {
+//                     console.log("\n")
+//                     console.table(row)
+//                     start()
+//                 }
+//             })
+//         })
+// }
 
 start()
 
