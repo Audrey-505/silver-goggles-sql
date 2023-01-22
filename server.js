@@ -147,9 +147,9 @@ const addARole = () => {
         ]).then((data) => {
             console.log(data)
             //const params = [data.title, data.salary, data.department_id]
-            const sql = `INSERT INTO roles (title, salary, department_id) VALUES (${data.title}, ${data.salary}, ${data.department_id})`;
-            //const params = [data.title, data.salary, data.department_id]
-            db.query(sql, (err, row) => {
+            const sql = 'INSERT INTO roles (title, salary, department_id) VALUES (?,?,?)';
+            const params = [data.title, data.salary, data.department_id]
+            db.query(sql, params, (err, row) => {
                 if (err) {
                     console.log(err)
                 } else {
@@ -187,7 +187,7 @@ const addAnEmployee = () => {
                 message: `what is the new employee's manager id?`
             }
         ]).then((data) => {
-            const sql = 'INSERT INTO employees (first_name, last_name, role_id, manager_id) VALUES (?)';
+            const sql = 'INSERT INTO employees (first_name, last_name, role_id, manager_id) VALUES (?,?,?,?)';
             const params = [data.first_name, data.last_name, data.role_id, data.manager_id]
             db.query(sql, params, (err, row) => {
                 if (err) {
