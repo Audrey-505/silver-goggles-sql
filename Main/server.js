@@ -188,6 +188,9 @@ const addAnEmployee = () => {
             }
         ]).then((data) => {
             const sql = 'INSERT INTO employees (first_name, last_name, role_id, manager_id) VALUES (?,?,?,?)';
+            if(data.manager_id === ''){
+                data.manager_id = null
+            }
             const params = [data.first_name, data.last_name, data.role_id, data.manager_id]
             db.query(sql, params, (err, row) => {
                 if (err) {
@@ -205,27 +208,30 @@ const addAnEmployee = () => {
 //     inquirer
 //         .prompt([
 //             {
-//                 type: 'input',
+//                 type: 'list',
 //                 name: 'employee',
-//                 message: `select the employee to update their role`
+//                 choices: employeeChoices(),
+//                 when(answers){
+//                     return answers.task === 'view employee options'
+//                 },
 //             },
+//             // {
+//             //     message: "Which Department's budget do you want to see?",
+//             //     name: 'id',
+//             //     type: 'list',
+//             //     choices: await departmentChoices(),
+//             //     when(answers) {
+//             //         return answers.task === 'View a Department Budget';
+//             //     },
+//             // },
 //             {
 //                 type: 'input',
 //                 name: 'role',
 //                 message: `select the role to assign the employee`
-//             },
-//             {
-//                 type: 'input',
-//                 name: 'role_id',
-//                 message: `what is the new employee's role id?`
-//             },
-//             {
-//                 type: 'input',
-//                 name: 'manager_id',
-//                 message: `what is the new employee's manager id?`
 //             }
 //         ]).then((data) => {
-//             const sql = 'INSERT INTO employees (first_name, last_name, role_id, manager_id) VALUES (?)';
+//             const sql = 'UPDATE employees SET role_id = ? WHERE first_name';
+//             //const params = req
 //             const params = [data.first_name, data.last_name, data.role_id, data.manager_id]
 //             db.query(sql, params, (err, row) => {
 //                 if (err) {
@@ -239,7 +245,21 @@ const addAnEmployee = () => {
 //         })
 // }
 
+//TESTING EMPLOYEE OPTIONS 
+// const departmentChoices = async () => {
+            //     const departmentQuery = `SELECT id AS value, name FROM department;`;
+            //     const departments = await connection.query(departmentQuery);
+            //     return departments[0];
+            // };
+const employeeChoices = () => {
+   const sql = 'SELECT id, first_name, last_name AS employee FROM employees';
+   const params = []
+   db.query =(sql, params)
+
+}
+
 start()
+//employeeChoices()
 
 app.listen(PORT, () => {
     console.log(`Server running on ${PORT}`)
