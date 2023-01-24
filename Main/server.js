@@ -205,45 +205,106 @@ const addAnEmployee = () => {
 }
 
 const updateEmployeeRole = () => {
-    inquirer
+    let employeeID = ''
+    let roleID = ''
+ 
+    const sql = 'SELECT id, first_name, last_name, role_id, manager_id AS employee FROM employees'
+    db.query(sql, (err, row) => {
+        if (err) {
+            console.log(err)
+        } else {
+            var employeeInfo = row
+            const employeeChoices = employeeInfo.map(({id, first_name, last_name})=> (({
+                name : first_name,
+                value : id
+            })))
+            inquirer
         .prompt([
             {
                 type: 'list',
                 name: 'employee',
                 message: 'select employee to update role',
-                choices: employeeChoices(),
-                when(answers){
-                    return answers.task === 'view employee options'
-                },
+                choices: employeeChoices
             },
-            // {
-            //     message: "Which Department's budget do you want to see?",
-            //     name: 'id',
-            //     type: 'list',
-            //     choices: await departmentChoices(),
-            //     when(answers) {
-            //         return answers.task === 'View a Department Budget';
-            //     },
-            // },
-            {
-                type: 'input',
-                name: 'role',
-                message: `select the role to assign the employee`
-            }
         ]).then((data) => {
-            const sql = 'UPDATE employees SET role_id = ? WHERE first_name';
-            //const params = req
-            const params = [data.first_name, data.last_name, data.role_id, data.manager_id]
-            db.query(sql, params, (err, row) => {
-                if (err) {
+            employeeID = data.employee
+            const sql = 'SELECT id, title FROM roles'
+            db.query(sql, (err, row) => {
+                if(err) {
                     console.log(err)
                 } else {
-                    console.log("\n")
-                    console.table(row)
-                    start()
+                    var roleInfo = row
+                    const roleChoices = roleInfo.map(({id, title}) => (({
+                        name : title,
+                        value: id
+                    })))
+                    inquirer
+                    .prompt([
+                        {
+                            type: 'list',
+                            name: 'roles',
+                            message: 'select the employees new role',
+                            choices: roleChoices
+                        },
+                    ]).then((data) => {
+                        roleID = data.roles
+                        const sql = 'UPDATE employees SET role_id = ? WHERE id = ?'
+                        db.query(sql, [employeeID, roleID], (err, result) => {
+                            if(err){
+                                console.log(err)
+                            } else {
+                                console.table(result)
+                            }
+                        })
+                    })
                 }
             })
         })
+        }
+    })
+
+
+
+    // inquirer
+    //     .prompt([
+    //         {
+    //             type: 'list',
+    //             name: 'employee',
+    //             message: 'select employee to update role',
+    //             choices: employeeChoices(),
+    //             // when(answers){
+    //             //     console.log(answers.task)
+    //             //     return answers.task === 'view employee options'
+    //             // },
+    //         },
+    //         // {
+    //         //     message: "Which Department's budget do you want to see?",
+    //         //     name: 'id',
+    //         //     type: 'list',
+    //         //     choices: await departmentChoices(),
+    //         //     when(answers) {
+    //         //         return answers.task === 'View a Department Budget';
+    //         //     },
+    //         // },
+    //         {
+    //             type: 'input',
+    //             name: 'role',
+    //             message: `select the role to assign the employee`
+    //         }
+    //     ]).then((data) => {
+    //         const sql = 'UPDATE employees SET role_id = ? WHERE first_name';
+    //         //const params = req
+    //         const params = [data.first_name, data.last_name, data.role_id, data.manager_id]
+    //         db.query(sql, params, (err, row) => {
+    //             if (err) {
+    //                 console.log(err)
+    //             } else {
+    //                 console.log("\n")
+    //                 console.table(row)
+    //                 start()
+    //             }
+    //         })
+    //     })
 }
 
 //TESTING EMPLOYEE OPTIONS 
@@ -255,13 +316,16 @@ const updateEmployeeRole = () => {
 
 const employeeChoices = () => {
    const sql = 'SELECT id, first_name, last_name AS employee FROM employees';
-   db.query =(sql, (err, row) => {
-    if(err) {
-        console.log(err)
-    } else {
-        return row
-    }
-   })
+//    db.query =(sql, (err, row) => {
+//     if(err) {
+//         console.log(err)
+//     } else {
+//         return row
+//     }
+//    })
+   const employeeOptions = db.query(sql)
+   console.log(employeeChoices[0])
+   return employeeOptions[0]
 
 }
 
