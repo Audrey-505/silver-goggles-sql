@@ -204,46 +204,47 @@ const addAnEmployee = () => {
         })
 }
 
-// const updateEmployeeRole = () => {
-//     inquirer
-//         .prompt([
-//             {
-//                 type: 'list',
-//                 name: 'employee',
-//                 choices: employeeChoices(),
-//                 when(answers){
-//                     return answers.task === 'view employee options'
-//                 },
-//             },
-//             // {
-//             //     message: "Which Department's budget do you want to see?",
-//             //     name: 'id',
-//             //     type: 'list',
-//             //     choices: await departmentChoices(),
-//             //     when(answers) {
-//             //         return answers.task === 'View a Department Budget';
-//             //     },
-//             // },
-//             {
-//                 type: 'input',
-//                 name: 'role',
-//                 message: `select the role to assign the employee`
-//             }
-//         ]).then((data) => {
-//             const sql = 'UPDATE employees SET role_id = ? WHERE first_name';
-//             //const params = req
-//             const params = [data.first_name, data.last_name, data.role_id, data.manager_id]
-//             db.query(sql, params, (err, row) => {
-//                 if (err) {
-//                     console.log(err)
-//                 } else {
-//                     console.log("\n")
-//                     console.table(row)
-//                     start()
-//                 }
-//             })
-//         })
-// }
+const updateEmployeeRole = () => {
+    inquirer
+        .prompt([
+            {
+                type: 'list',
+                name: 'employee',
+                message: 'select employee to update role',
+                choices: employeeChoices(),
+                when(answers){
+                    return answers.task === 'view employee options'
+                },
+            },
+            // {
+            //     message: "Which Department's budget do you want to see?",
+            //     name: 'id',
+            //     type: 'list',
+            //     choices: await departmentChoices(),
+            //     when(answers) {
+            //         return answers.task === 'View a Department Budget';
+            //     },
+            // },
+            {
+                type: 'input',
+                name: 'role',
+                message: `select the role to assign the employee`
+            }
+        ]).then((data) => {
+            const sql = 'UPDATE employees SET role_id = ? WHERE first_name';
+            //const params = req
+            const params = [data.first_name, data.last_name, data.role_id, data.manager_id]
+            db.query(sql, params, (err, row) => {
+                if (err) {
+                    console.log(err)
+                } else {
+                    console.log("\n")
+                    console.table(row)
+                    start()
+                }
+            })
+        })
+}
 
 //TESTING EMPLOYEE OPTIONS 
 // const departmentChoices = async () => {
@@ -251,10 +252,16 @@ const addAnEmployee = () => {
             //     const departments = await connection.query(departmentQuery);
             //     return departments[0];
             // };
+
 const employeeChoices = () => {
    const sql = 'SELECT id, first_name, last_name AS employee FROM employees';
-   const params = []
-   db.query =(sql, params)
+   db.query =(sql, (err, row) => {
+    if(err) {
+        console.log(err)
+    } else {
+        return row
+    }
+   })
 
 }
 
