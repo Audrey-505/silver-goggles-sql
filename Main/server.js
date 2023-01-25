@@ -29,7 +29,7 @@ function start() {
                 type: 'list',
                 name: 'options',
                 message: 'What would you like to do?',
-                choices: ['view all departments', 'view all roles', 'view all employees', 'add a department', 'add a role', 'add an employee', 'update an employee role', 'quit']
+                choices: ['view all departments', 'view all roles', 'view all employees', 'add a department', 'add a role', 'add an employee', 'update an employee role', 'delete an employee', 'quit']
             }
         ]).then((data) => {
             //switch statement for each option / 
@@ -54,6 +54,9 @@ function start() {
                     break;
                 case "update an employee role":
                     updateEmployeeRole()
+                    break;
+                case "delete an employee":
+                    deleteEmployee()
                     break;
                 case "quit":
                     process.exit()
@@ -214,7 +217,7 @@ const updateEmployeeRole = () => {
         if (err) {
             console.log(err)
         } else {
-            var employeeInfo = row
+            let employeeInfo = row
             const employeeChoices = employeeInfo.map(({ id, first_name, last_name }) => (({
                 name: first_name,
                 value: id
@@ -266,7 +269,42 @@ const updateEmployeeRole = () => {
     })
 }
 
-
+const deleteEmployee = () => {
+    let employeeId = ''
+    //const sql = 'DELETE FROM employees WHERE id = ?'
+    const sql = 'SELECT id, first_name FROM employees'
+    db.query(sql, (err, results) => {
+        if(err){
+            console.log(err)
+        } else {
+            let employeeInfo = results
+            const employeeChoices = employeeInfo.map(({id, first_name}) => (({
+                name: first_name,
+                value: id
+            })))
+            inquirer
+                .prompt([
+                    {
+                        type: 'list',
+                        name: 'employee',
+                        message: 'select employee to delete',
+                        choices: employeeChoices
+                    },
+                ]).then((data) => {
+                    employeeId = data.employee
+                    const sql = 'DELETE FROM employees WHERE id = ?'
+                    db.query(sql, [employeeId], (err, results) => {
+                        if(err){
+                            console.log(err)
+                        } else {
+                            console.table(results)
+                            start()
+                        }
+                    })
+            })
+        }
+    })
+}
 
 // const employeeChoices = () => {
 //    const sql = 'SELECT id, first_name, last_name AS employee FROM employees';
