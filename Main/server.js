@@ -29,7 +29,7 @@ function start() {
                 type: 'list',
                 name: 'options',
                 message: 'What would you like to do?',
-                choices: ['view all departments', 'view all roles', 'view all employees', 'add a department', 'add a role', 'add an employee', 'update an employee role', 'delete an employee', 'delete a department', 'quit']
+                choices: ['view all departments', 'view all roles', 'view all employees', 'add a department', 'add a role', 'add an employee', 'update an employee role', 'delete an employee', 'delete a department', 'delete a role', 'quit']
             }
         ]).then((data) => {
             //switch statement for each option / 
@@ -60,6 +60,9 @@ function start() {
                     break;
                 case "delete a department":
                     deleteDepartment()
+                    break;
+                case "delete a role":
+                    deleteRole()
                     break;
                 case "quit":
                     process.exit()
@@ -334,6 +337,43 @@ const deleteDepartment = () => {
                     departmentId = data.department
                     const sql = 'DELETE FROM departments WHERE id = ?'
                     db.query(sql, [departmentId], (err, results) => {
+                        if(err){
+                            console.log(err)
+                        } else {
+                            console.table(results)
+                            start()
+                        }
+                    })
+            })
+        }
+    })
+}
+
+const deleteRole = () => {
+    let roleId = ''
+    //const sql = 'DELETE FROM employees WHERE id = ?'
+    const sql = 'SELECT id, title FROM roles'
+    db.query(sql, (err, results) => {
+        if(err){
+            console.log(err)
+        } else {
+            let roleInfo = results
+            const roleChoices = roleInfo.map(({id, title}) => (({
+                name: title,
+                value: id
+            })))
+            inquirer
+                .prompt([
+                    {
+                        type: 'list',
+                        name: 'role',
+                        message: 'select a role to delete',
+                        choices: roleChoices
+                    },
+                ]).then((data) => {
+                    roleId = data.role
+                    const sql = 'DELETE FROM roles WHERE id = ?'
+                    db.query(sql, [roleId], (err, results) => {
                         if(err){
                             console.log(err)
                         } else {
