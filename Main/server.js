@@ -29,7 +29,7 @@ function start() {
                 type: 'list',
                 name: 'options',
                 message: 'What would you like to do?',
-                choices: ['view all departments', 'view all roles', 'view all employees', 'add a department', 'add a role', 'add an employee', 'update an employee role', 'delete an employee', 'quit']
+                choices: ['view all departments', 'view all roles', 'view all employees', 'add a department', 'add a role', 'add an employee', 'update an employee role', 'delete an employee', 'delete a department', 'quit']
             }
         ]).then((data) => {
             //switch statement for each option / 
@@ -57,6 +57,9 @@ function start() {
                     break;
                 case "delete an employee":
                     deleteEmployee()
+                    break;
+                case "delete a department":
+                    deleteDepartment()
                     break;
                 case "quit":
                     process.exit()
@@ -305,6 +308,44 @@ const deleteEmployee = () => {
         }
     })
 }
+
+const deleteDepartment = () => {
+    let departmentId = ''
+    //const sql = 'DELETE FROM employees WHERE id = ?'
+    const sql = 'SELECT id, department_name FROM departments'
+    db.query(sql, (err, results) => {
+        if(err){
+            console.log(err)
+        } else {
+            let departmentInfo = results
+            const departmentChoices = departmentInfo.map(({id, department_name}) => (({
+                name: department_name,
+                value: id
+            })))
+            inquirer
+                .prompt([
+                    {
+                        type: 'list',
+                        name: 'department',
+                        message: 'select department to delete',
+                        choices: departmentChoices
+                    },
+                ]).then((data) => {
+                    departmentId = data.department
+                    const sql = 'DELETE FROM departments WHERE id = ?'
+                    db.query(sql, [departmentId], (err, results) => {
+                        if(err){
+                            console.log(err)
+                        } else {
+                            console.table(results)
+                            start()
+                        }
+                    })
+            })
+        }
+    })
+}
+
 
 // const employeeChoices = () => {
 //    const sql = 'SELECT id, first_name, last_name AS employee FROM employees';
