@@ -29,7 +29,7 @@ function start() {
                 type: 'list',
                 name: 'options',
                 message: 'What would you like to do?',
-                choices: ['view all departments', 'view all roles', 'view all employees', 'add a department', 'add a role', 'add an employee', 'update an employee role', 'delete an employee', 'delete a department', 'delete a role', 'quit']
+                choices: ['view all departments', 'view all roles', 'view all employees', 'add a department', 'add a role', 'add an employee', 'update an employee role', 'delete an employee', 'delete a department', 'delete a role', 'budget', 'quit']
             }
         ]).then((data) => {
             //switch statement for each option / 
@@ -63,6 +63,9 @@ function start() {
                     break;
                 case "delete a role":
                     deleteRole()
+                    break;
+                case "budget":
+                    budget()
                     break;
                 case "quit":
                     process.exit()
@@ -386,21 +389,57 @@ const deleteRole = () => {
     })
 }
 
+const budget = () => {
+    const sql = 'SELECT department_id AS id, department_name AS department, SUM(salary) AS budget FROM roles JOIN departments ON roles.department_id = departments.id GROUP BY department_id'
+    db.query(sql, (err, results) => {
+        if(err){
+            console.log(err)
+        } else {
+            console.log(results)
+        }
+    })
+}
 
-// const employeeChoices = () => {
-//    const sql = 'SELECT id, first_name, last_name AS employee FROM employees';
-// //    db.query =(sql, (err, row) => {
-// //     if(err) {
-// //         console.log(err)
-// //     } else {
-// //         return row
-// //     }
-// //    })
-//    const employeeOptions = db.query(sql)
-//    console.log(employeeChoices[0])
-//    return employeeOptions[0]
 
+
+// const budget = () => {
+//     let departmentId = ''
+//     const sql = 'SELECT department_id AS id, department.name AS department, SUM(salary) AS budget FROM role JOIN department ON role.department_id = department.id GROUP BY department_id`'
+//     //const sql = 'SELECT id, department_name FROM departments'
+//     db.query(sql, (err, results) => {
+//         if(err){
+//             console.log(err)
+//         } else {
+//             let departmentInfo = results
+//             const departmentChoices = departmentInfo.map(({id, department_name}) => (({
+//                 name: department_name,
+//                 value: id
+//             })))
+//             inquirer
+//                 .prompt([
+//                     {
+//                         type: 'list',
+//                         name: 'department',
+//                         message: 'select a department to view used budget',
+//                         choices: departmentChoices
+//                     },
+//                 ]).then((data) => {
+//                     departmentId = data.department
+//                     const sql = 'SELECT roles.id, roles.salary FROM roles RIGHT JOIN employees ON roles.id=employees.role_id;'
+//                     //const sql = 'SELECT id, salary FROM roles WHERE department_id = ?'
+//                     db.query(sql, [departmentId], (err, results) => {
+//                         if(err){
+//                             console.log(err)
+//                         } else {
+//                             let rolesInfo = results
+//                             console.log(rolesInfo)
+//                         }
+//                     })
+//                 })
+//         }
+//     })
 // }
+
 
 start()
 
