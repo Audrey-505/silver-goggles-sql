@@ -390,7 +390,7 @@ const deleteRole = () => {
 }
 
 const budget = () => {
-    const sql = 'SELECT department_id AS id, department_name AS department, SUM(salary) AS budget FROM roles JOIN departments ON roles.department_id = departments.id GROUP BY department_id'
+    const sql = 'SELECT department_id AS id, department_name AS department, SUM(salary) AS budget FROM employees JOIN roles ON employees.role_id = roles.id JOIN departments on roles.department_id = departments.id GROUP BY departments.id'
     db.query(sql, (err, results) => {
         if(err){
             console.log(err)
