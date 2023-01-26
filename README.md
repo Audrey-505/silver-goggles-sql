@@ -47,3 +47,7 @@ For any questions please email me at adrianaquin22@gmail.com
 
 <img width="1041" alt="Screen Shot 2023-01-26 at 8 37 15 AM" src="https://user-images.githubusercontent.com/77470771/214849568-4305645e-ece6-45ff-b46e-ce8816e86b59.png">
 
+Walkthrough of project functionality
+
+https://drive.google.com/file/d/12a3z6xjUeWuXWw_XhxzorVHclEmLmQdA/view
+
