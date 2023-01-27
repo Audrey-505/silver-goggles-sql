@@ -22,6 +22,7 @@ ask the user what the would like to do to the database's information.
 ## Installation 
 
 To install the application clone the repo and download node, npm packadge express, inquirer, console.table, and mysql2 will also need to be downloaded. 
+The user will also want to "seed" the database with the provided seeds file.
 
 ## Usage 
 
